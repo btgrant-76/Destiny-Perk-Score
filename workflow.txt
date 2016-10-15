@@ -1,0 +1,26 @@
+
+if weapon_file is missing
+     bail out w/error message
+if there are no configs
+     start a new config called "Perk Score"
+     Message the user that they can rename the file
+     Exit because there's no scoring to be done.
+
+read in all of the configs create a scoring data structure for each config
+
+read in all of the perks & create a map of weapon classes-to-perks ({Scout Rifle: [perk1, perk2]})
+if any new perks are found for any given weapon class
+  Write these out to all configs, message the user that new perks were found & they should update the configs & run again
+  Exit
+
+create weapon_file_with_updated_scores
+# there's probably some cleanup necessary if there happens to be a weapon_file_with_updated_scores from a previous run. Either delete it or empty it or something.
+write headers to weapon_file_with_updated_scores # this includes headers for each config if there isn't a matching config header name already present where we'd expect to find it
+
+for weapon_and_perks in all_weapons
+  config_score:  (config_name:  str, score:  int)
+  for config in all_configs
+    score = config.score(weapon_and_perks)
+    update original line with the score
+    # we have to have the full line in hand at this point. There also might already be an appropriately-named column available & we don't want to double up on those.
+  # each time there's a weapon_and_perks in scope, we need to keep track of the original, full line so we can write that same line back out with the addition of any new perk scores. DIM has some unusual CSV formatting. Should the module negotiating with that format be consistent with the source formatting?
