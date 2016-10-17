@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from os import listdir
+import configs
 
 weapon_file_name = 'destinyWeapons.csv'
 config_file_identifier = '_perkscore_config.txt'
@@ -73,10 +74,7 @@ name_weapon_type_and_perks = [pair_name_and_perks(line) for line in weapon_file.
 
 all_weapon_types = ['Auto Rifle', 'Scout Rifle', 'Hand Cannon', 'Pulse Rifle', 'Fusion Rifle', 'Shotgun',
                     'Sniper Rifle', 'Sidearm', 'Rocket Launcher', 'Machine Gun', 'Sword']
-
-perkscore_configs = {'default': {'Auto Rifle': {}, 'Scout Rifle': {}, 'Hand Cannon': {}, 'Pulse Rifle': {},
-                                 'Fusion Rifle': {}, 'Shotgun': {}, 'Sniper Rifle': {}, 'Sidearm': {},
-                                 'Rocket Launcher': {}, 'Machine Gun': {}, 'Sword': {}}}
+all_weapon_types.sort()
 
 perks_by_type_from_weapon_file = {}
 
@@ -86,24 +84,17 @@ for weapon_info in name_weapon_type_and_perks:
     set_of_perks = perks_by_type_from_weapon_file.get(weapon_type, set())
     perks_by_type_from_weapon_file[weapon_type] = set_of_perks | perks
 
-# print(perks_by_type_from_weapon_file)
-
 default_config = open('Default' + config_file_identifier, 'a')
 
-for weapon_type_and_perks in perks_by_type_from_weapon_file.items():
-    weapon_type, perks = weapon_type_and_perks
-
+for weapon_type in all_weapon_types:
     default_config.write('--- ' + weapon_type + ' ---\n')
-    # print(weapon_type_and_perks)
 
+    perks = perks_by_type_from_weapon_file.get(weapon_type, {})
     perks = list(perks)
     perks.sort()
 
     for perk in perks:
         default_config.write(perk + ':0\n')
-
-
-    # print(weapon_type_and_perks[0] + ' ' + [weapon_type_and_perks[1]])
 
 
 default_config.close()
