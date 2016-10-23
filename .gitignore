@@ -1,1 +1,4 @@
 .idea
+*.iml
+*_perk_score_config.txt
+destinyWeapons.csv
