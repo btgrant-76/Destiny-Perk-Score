@@ -18,7 +18,7 @@ class DestinyItemManagerWeaponSource:
         # TODO move the rest of these lines out of the init
         file = open(dim_file_name, 'r')
         headers = [header.strip() for header in file.readline().split(',')]
-        print(headers)
+        # print(headers)
 
         self._name_index = headers.index('Name')
         self._perk_index = headers.index('Nodes')
@@ -48,7 +48,7 @@ class DestinyItemManagerWeaponSource:
             set_of_perks = perks_by_type.get(weapon_type, set())
             perks_by_type[weapon_type] = set_of_perks | perks
 
-        print(perks_by_type)
+        # print(perks_by_type)
         return perks_by_type
 
     @staticmethod
