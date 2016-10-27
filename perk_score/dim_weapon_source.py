@@ -18,7 +18,6 @@ class DestinyItemManagerWeaponSource:
         # TODO move the rest of these lines out of the init
         file = open(dim_file_name, 'r')
         headers = [header.strip() for header in file.readline().split(',')]
-        # print(headers)
 
         self._name_index = headers.index('Name')
         self._perk_index = headers.index('Nodes')
@@ -28,7 +27,6 @@ class DestinyItemManagerWeaponSource:
 
     def pair_name_and_perks(self, weapon_file_line):
         split_line = weapon_file_line.split(', ')
-        # name = split_line[self._name_index]
         weapon_type = split_line[self._type_index]
         perks = [self.clean_up_perk_name(perk) for perk in split_line[self._perk_index: len(split_line) - 1]]
         return weapon_type, perks
@@ -48,7 +46,10 @@ class DestinyItemManagerWeaponSource:
             set_of_perks = perks_by_type.get(weapon_type, set())
             perks_by_type[weapon_type] = set_of_perks | perks
 
-        # print(perks_by_type)
+        for weapon_type in perks_by_type.keys():
+            perk_set = perks_by_type[weapon_type]
+            perks_by_type[weapon_type] = dict(zip(perk_set, [0] * len(perk_set)))
+
         return perks_by_type
 
     @staticmethod
@@ -57,7 +58,4 @@ class DestinyItemManagerWeaponSource:
             return perk_name.rstrip('*')
         else:
             return perk_name
-
-
-
 

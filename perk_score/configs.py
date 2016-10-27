@@ -32,13 +32,18 @@ class Config:
             config_file.write('--- ' + weapon_type + ' ---\n')
 
             perks = self.perks_by_weapon_type.get(weapon_type, {})
-            perks = list(perks)
-            # TODO move this into the config or into the file handling?
-            perks.sort()
+            # perks = list(perks)
+            # # TODO move this into the config or into the file handling?
+            # perks.sort()
 
-            for perk in perks:
+            perk_names = sorted(perks.keys())
+
+            for perk_name in perk_names:
+                # print(perk)
                 # FIXME this doesn't account for the case where there are existing scores
-                config_file.write(perk + ':0\n')
+                # perk_and_score = perks[perk_name]
+                # print(perk_and_score)
+                config_file.write('{0}:{1}\n'.format(perk_name, perks[perk_name]))
 
         config_file.close()
         self.delete_backup_file()
