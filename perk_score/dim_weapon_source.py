@@ -1,3 +1,6 @@
+import perk_score.configs as configs
+
+
 file_name = 'destinyWeapons.csv'
 
 
@@ -28,7 +31,7 @@ class DestinyItemManagerWeaponSource:
     def pair_name_and_perks(self, weapon_file_line):
         split_line = weapon_file_line.split(', ')
         weapon_type = split_line[self._type_index]
-        perks = [self.clean_up_perk_name(perk) for perk in split_line[self._perk_index: len(split_line) - 1]]
+        perks = [self.clean_up_perk_name(perk) for perk in split_line[self._perk_index: len(split_line)]]
         return weapon_type, perks
 
     def perks_by_type(self):
@@ -52,10 +55,21 @@ class DestinyItemManagerWeaponSource:
 
         return perks_by_type
 
+    def create_config(self, name):
+        config = configs.Config(name)
+        config.perks_by_weapon_type = self.perks_by_type()
+        return config
+
     @staticmethod
     def clean_up_perk_name(perk_name):
+
+        perk_name = perk_name.strip()
+
+        if perk_name.endswith(','):
+            perk_name = perk_name.rstrip(',')
+
         if perk_name.endswith('*'):
-            return perk_name.rstrip('*')
-        else:
-            return perk_name
+            perk_name = perk_name.rstrip('*')
+
+        return perk_name
 
