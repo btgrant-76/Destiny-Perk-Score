@@ -1,2 +1,4 @@
 Name, Tag, Tier, Type, Light, Dmg, Owner, % Leveled, Locked, Equipped, Year,AA, Impact, Range, Stability, ROF, Reload, Mag, Equip, Notes, Nodes
 Scout Rifle 1, , Rare, Scout Rifle, 340, Kinetic, Hunter(345), 0, false, false, 2, 48, 35, 45, 56, 52, 52, 20, 63, , Sights 1*, Sights 2, Perk 1, Perk 2, Perk 3,
+Pulse Rifle 1, , Legendary, Pulse Rifle, 335, Kinetic, Hunter(345), 100, true, false, 2, 60, 7, 36, 90, 73, 73, 24, 89, , Pulse Sight 1, Pulse Sight 2*, Pulse Sight 3, Pulse Perk 1, Pulse Perk 2*, Pulse Perk 3, Pulse Perk 4*,
+Scout Rifle 2, , Rare, Scout Rifle, 340, Kinetic, Hunter(345), 0, false, false, 2, 48, 35, 45, 56, 52, 52, 20, 63, , Sights 1, Sights 3*, Perk 1*, Perk 5, Perk 4,

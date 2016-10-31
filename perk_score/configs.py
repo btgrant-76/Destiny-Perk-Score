@@ -26,7 +26,7 @@ class Config:
     def write_config_file(self):
         self.create_backup_config()
 
-        config_file = open('Default' + config_file_identifier, 'a')  # TODO is there a way to truncate and then write?
+        config_file = open(self.config_file_name(), 'a')  # TODO is there a way to truncate and then write?
 
         for weapon_type in self._all_weapon_types:
             config_file.write('--- ' + weapon_type + ' ---\n')
