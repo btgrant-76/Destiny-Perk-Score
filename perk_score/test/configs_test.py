@@ -10,16 +10,22 @@ class ConfigTest(unittest.TestCase):
                            'Sniper Rifle', 'Sidearm', 'Rocket Launcher', 'Machine Gun', 'Sword'])
     file_name = 'test_perk_score_config.txt'
     test_config = None
+    config_file = None
 
     def setUp(self):
         self.test_config = configs.Config('test')
 
     def tearDown(self):
+        if self.config_file:
+            self.config_file.close()
+            self.config_file = None
+
         if os.path.isfile(self.file_name):
             os.remove(self.file_name)
 
     def open_config_file(self):
-        return open(self.file_name)
+        self.config_file = open(self.file_name)
+        return self.config_file
 
     def test_names_that_are_config_names(self):
         confirmed_config_names = configs.config_files(['first_perk_score_config.txt', 'not_a_config.txt',
@@ -80,6 +86,31 @@ class ConfigTest(unittest.TestCase):
         config_file = self.open_config_file()
 
         for line in config_file:
-            print(line)
             self.assertEqual(-1, line.find(fake_weapon_type))
+
+    def test_no_perks_are_change_when_all_perks_already_exist(self):
+        self.test_config.perks_by_weapon_type = {'Scout Rifle': {'Scout 1': 2, 'Scout 2': 5},
+                                                 'Fusion Rifle': {'Fusion 1': 8, 'Fusion 2': 100}}
+        another_config = configs.Config('Another Config')
+        another_config.perks_by_weapon_type = {'Scout Rifle': {'Scout 1': 4, 'Scout 2': 10},
+                                               'Fusion Rifle': {'Fusion 1': 16, 'Fusion 2': 200}}
+
+        self.test_config.add_missing_perks(another_config)
+
+        self.assertEqual({'Scout 1': 2, 'Scout 2': 5}, self.test_config.perks_by_weapon_type['Scout Rifle'])
+        self.assertEqual({'Fusion 1': 8, 'Fusion 2': 100}, self.test_config.perks_by_weapon_type['Fusion Rifle'])
+
+    def test_addition_of_missing_perks(self):
+        self.test_config.perks_by_weapon_type = {'Scout Rifle': {'Scout 1': 2, 'Scout 2': 5},
+                                                 'Fusion Rifle': {'Fusion 1': 8, 'Fusion 2': 100}}
+        another_config = configs.Config('Another Config')
+        another_config.perks_by_weapon_type = {'Scout Rifle': {'Scout 3': 4, 'Scout 4': 10},
+                                               'Shotgun': {'Shotgun 1': 16, 'Shotgun 2': 200}}
+
+        self.test_config.add_missing_perks(another_config)
+
+        self.assertEqual({'Scout 1': 2, 'Scout 2': 5, 'Scout 3': 4, 'Scout 4': 10},
+                         self.test_config.perks_by_weapon_type['Scout Rifle'])
+        self.assertEqual({'Fusion 1': 8, 'Fusion 2': 100}, self.test_config.perks_by_weapon_type['Fusion Rifle'])
+        self.assertEqual({'Shotgun 1': 16, 'Shotgun 2': 200}, self.test_config.perks_by_weapon_type['Shotgun'])
 

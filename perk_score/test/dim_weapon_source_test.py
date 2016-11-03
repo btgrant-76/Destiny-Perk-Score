@@ -1,14 +1,8 @@
 import unittest
-from os import listdir
 import perk_score.dim_weapon_source as source
 
 
 class DIMSourceTest(unittest.TestCase):
-
-    def test_something(self):
-        print(listdir('.'))
-        self.assertTrue(True)
-        pass
 
     def test_config_from_source(self):
         test_source = source.DestinyItemManagerWeaponSource('./perk_score/test/dimTestFile.csv')

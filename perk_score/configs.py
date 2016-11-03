@@ -32,17 +32,9 @@ class Config:
             config_file.write('--- ' + weapon_type + ' ---\n')
 
             perks = self.perks_by_weapon_type.get(weapon_type, {})
-            # perks = list(perks)
-            # # TODO move this into the config or into the file handling?
-            # perks.sort()
-
             perk_names = sorted(perks.keys())
 
             for perk_name in perk_names:
-                # print(perk)
-                # FIXME this doesn't account for the case where there are existing scores
-                # perk_and_score = perks[perk_name]
-                # print(perk_and_score)
                 config_file.write('{0}:{1}\n'.format(perk_name, perks[perk_name]))
 
         config_file.close()
@@ -60,3 +52,17 @@ class Config:
     def delete_backup_file(self):
         if isfile(self.backup_file_name()):
             os.remove(self.backup_file_name())
+
+    def add_missing_perks(self, config):
+        for weapon_type in config.perks_by_weapon_type.keys():
+            incoming_perks = config.perks_by_weapon_type[weapon_type]
+
+            if weapon_type in self.perks_by_weapon_type.keys():
+                my_perks = self.perks_by_weapon_type[weapon_type]
+
+                for incoming_perk in incoming_perks.keys():
+                    if incoming_perk not in my_perks.keys():
+                        my_perks[incoming_perk] = incoming_perks[incoming_perk]
+            else:
+                self.perks_by_weapon_type[weapon_type] = incoming_perks
+

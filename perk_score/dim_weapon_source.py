@@ -53,6 +53,7 @@ class DestinyItemManagerWeaponSource:
             perk_set = perks_by_type[weapon_type]
             perks_by_type[weapon_type] = dict(zip(perk_set, [0] * len(perk_set)))
 
+        file.close()
         return perks_by_type
 
     def create_config(self, name):
