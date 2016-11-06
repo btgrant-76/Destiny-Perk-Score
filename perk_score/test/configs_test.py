@@ -95,7 +95,8 @@ class ConfigTest(unittest.TestCase):
         another_config.perks_by_weapon_type = {'Scout Rifle': {'Scout 1': 4, 'Scout 2': 10},
                                                'Fusion Rifle': {'Fusion 1': 16, 'Fusion 2': 200}}
 
-        self.test_config.add_missing_perks(another_config)
+        perks_were_added = self.test_config.add_missing_perks(another_config)
+        self.assertFalse(perks_were_added)
 
         self.assertEqual({'Scout 1': 2, 'Scout 2': 5}, self.test_config.perks_by_weapon_type['Scout Rifle'])
         self.assertEqual({'Fusion 1': 8, 'Fusion 2': 100}, self.test_config.perks_by_weapon_type['Fusion Rifle'])
@@ -107,7 +108,8 @@ class ConfigTest(unittest.TestCase):
         another_config.perks_by_weapon_type = {'Scout Rifle': {'Scout 3': 4, 'Scout 4': 10},
                                                'Shotgun': {'Shotgun 1': 16, 'Shotgun 2': 200}}
 
-        self.test_config.add_missing_perks(another_config)
+        perks_were_added = self.test_config.add_missing_perks(another_config)
+        self.assertTrue(perks_were_added)
 
         self.assertEqual({'Scout 1': 2, 'Scout 2': 5, 'Scout 3': 4, 'Scout 4': 10},
                          self.test_config.perks_by_weapon_type['Scout Rifle'])

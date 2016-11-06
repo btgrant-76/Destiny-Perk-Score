@@ -54,6 +54,7 @@ class Config:
             os.remove(self.backup_file_name())
 
     def add_missing_perks(self, config):
+        perks_added = False
         for weapon_type in config.perks_by_weapon_type.keys():
             incoming_perks = config.perks_by_weapon_type[weapon_type]
 
@@ -62,7 +63,11 @@ class Config:
 
                 for incoming_perk in incoming_perks.keys():
                     if incoming_perk not in my_perks.keys():
+                        perks_added = True
                         my_perks[incoming_perk] = incoming_perks[incoming_perk]
             else:
                 self.perks_by_weapon_type[weapon_type] = incoming_perks
+                perks_added = True
+
+        return perks_added
 
