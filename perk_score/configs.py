@@ -12,10 +12,13 @@ class Config:
     _all_weapon_types = sorted(['Auto Rifle', 'Scout Rifle', 'Hand Cannon', 'Pulse Rifle', 'Fusion Rifle', 'Shotgun',
                                'Sniper Rifle', 'Sidearm', 'Rocket Launcher', 'Machine Gun', 'Sword'])
     name = None
-    perks_by_weapon_type = {}
+    perks_by_weapon_type = None
 
     def __init__(self, name):
         self.name = name
+        # If I assign a default {} above instead of doing this here, there seems to be some shared, mutable state
+        # across instances. What gives?
+        self.perks_by_weapon_type = {}
 
     def config_file_name(self):
         return self.name + config_file_identifier
@@ -70,4 +73,23 @@ class Config:
                 perks_added = True
 
         return perks_added
+
+    def read_file(self):
+        config_file = open(self.config_file_name(), 'r')
+
+        current_type = None
+
+        for line in config_file:
+            print('line is ' + line)
+            if line.startswith('---'):
+                current_type = line.strip().lstrip('--- ').rstrip(' ---')
+                # current_type = current_type.lstrip('--- ')
+                print('current type is \'' + current_type + '\'\n')
+            else:
+                perks = self.perks_by_weapon_type.get(current_type, {})
+                perk_and_score = line.strip().split(':')
+                perks[perk_and_score[0]] = int(perk_and_score[1])
+                self.perks_by_weapon_type[current_type] = perks
+
+        config_file.close()
 

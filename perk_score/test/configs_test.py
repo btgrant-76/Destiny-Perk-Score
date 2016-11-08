@@ -16,10 +16,11 @@ class ConfigTest(unittest.TestCase):
         self.test_config = configs.Config('test')
 
     def tearDown(self):
+        self.test_config = None
+
         if self.config_file:
             self.config_file.close()
             self.config_file = None
-
         if os.path.isfile(self.file_name):
             os.remove(self.file_name)
 
@@ -115,4 +116,27 @@ class ConfigTest(unittest.TestCase):
                          self.test_config.perks_by_weapon_type['Scout Rifle'])
         self.assertEqual({'Fusion 1': 8, 'Fusion 2': 100}, self.test_config.perks_by_weapon_type['Fusion Rifle'])
         self.assertEqual({'Shotgun 1': 16, 'Shotgun 2': 200}, self.test_config.perks_by_weapon_type['Shotgun'])
+
+    def test_an_empty_file_yields_an_empty_config(self):
+        a_file = open('test_perk_score_config.txt', 'w')
+        a_file.close()
+
+        self.test_config.read_file()
+        self.assertEqual(0, len(self.test_config.perks_by_weapon_type))
+
+    def test_a_populated_config_file_yields_a_populated_config(self):
+        a_file = open('test_perk_score_config.txt', 'w')
+        for line in ['--- Fusion Rifle ---', 'Fusion 1:8', 'Fusion 2:100',
+                     '--- Shotgun ---', 'Shotgun 1:16', 'Shotgun 2:200']:
+            a_file.write(line + '\n')
+        a_file.close()
+
+        self.test_config.read_file()
+
+        self.assertEqual({'Fusion 1': 8, 'Fusion 2': 100}, self.test_config.perks_by_weapon_type['Fusion Rifle'])
+        self.assertEqual({'Shotgun 1': 16, 'Shotgun 2': 200}, self.test_config.perks_by_weapon_type['Shotgun'])
+
+
+
+
 
