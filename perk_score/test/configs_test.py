@@ -136,7 +136,9 @@ class ConfigTest(unittest.TestCase):
         self.assertEqual({'Fusion 1': 8, 'Fusion 2': 100}, self.test_config.perks_by_weapon_type['Fusion Rifle'])
         self.assertEqual({'Shotgun 1': 16, 'Shotgun 2': 200}, self.test_config.perks_by_weapon_type['Shotgun'])
 
+    def test_config_name_from_config_file_name(self):
+        config_files_to_config_names = {'PVP_perk_score_config.txt': 'PVP', 'PVE_perk_score_config.txt': 'PVE',
+                                        'some random name_perk_score_config.txt': 'some random name'}
 
-
-
-
+        for file_name in config_files_to_config_names.keys():
+            self.assertEqual(config_files_to_config_names[file_name], configs.config_name(file_name))

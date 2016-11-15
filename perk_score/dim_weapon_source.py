@@ -46,6 +46,14 @@ class DestinyItemManagerWeaponSource:
         for weapon_info in weapon_type_and_perks:
             weapon_type = weapon_info[0]
             perks = set(weapon_info[1])
+
+            if '' in perks:
+                # Empty perks only seem to be show up when I use the 'real' file from DIM.
+                # If I try to introduce the same end-of-line characters, they end up being stripped out.
+                # I'm not interested in investigating the source of the different behavior now so just
+                # remove an empty perk.
+                perks.remove('')
+
             set_of_perks = perks_by_type.get(weapon_type, set())
             perks_by_type[weapon_type] = set_of_perks | perks
 

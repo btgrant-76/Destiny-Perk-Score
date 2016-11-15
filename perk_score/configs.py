@@ -8,6 +8,10 @@ def config_files(file_names):
     return list(filter(lambda n: n.endswith(config_file_identifier), file_names))
 
 
+def config_name(file_name):
+    return file_name.replace(config_file_identifier, '')
+
+
 class Config:
     _all_weapon_types = sorted(['Auto Rifle', 'Scout Rifle', 'Hand Cannon', 'Pulse Rifle', 'Fusion Rifle', 'Shotgun',
                                'Sniper Rifle', 'Sidearm', 'Rocket Launcher', 'Machine Gun', 'Sword'])
@@ -80,11 +84,8 @@ class Config:
         current_type = None
 
         for line in config_file:
-            print('line is ' + line)
             if line.startswith('---'):
                 current_type = line.strip().lstrip('--- ').rstrip(' ---')
-                # current_type = current_type.lstrip('--- ')
-                print('current type is \'' + current_type + '\'\n')
             else:
                 perks = self.perks_by_weapon_type.get(current_type, {})
                 perk_and_score = line.strip().split(':')
