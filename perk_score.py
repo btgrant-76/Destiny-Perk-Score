@@ -14,15 +14,14 @@ if len(potential_sources) != 1:
 else:
     weapon_file = potential_sources[0]
 
-
 weapons_source = weapons.DestinyItemManagerWeaponSource(weapon_file)
 
-# TODO read in existing configs
 config_file_names = configs.config_files(cur_dir_files)
 
 default_config = weapons_source.create_config('Default')
 
 perks_by_type_from_weapon_file = weapons_source.perks_by_type()
+
 
 def log_and_return(name, value):
     print('got "{0}" for "{1}"'.format(value, name))
@@ -51,5 +50,5 @@ else:
         print('New perks have been discovered in the weapon source file and were added to the following configs:  {0}. '
               'Please update the configs and run perk_score again.'.format(names_of_updated_configs))
     else:
-        print('No new perks were found. Now we need to update the source with perk values...')
+        weapons_source.update_with_configs(configs_from_files.values())
     exit()

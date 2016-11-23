@@ -1,4 +1,5 @@
 import perk_score.configs as configs
+import os
 
 
 file_name = 'destinyWeapons.csv'
@@ -68,6 +69,40 @@ class DestinyItemManagerWeaponSource:
         config = configs.Config(name)
         config.perks_by_weapon_type = self.perks_by_type()
         return config
+
+    def update_with_configs(self, configurations):
+        # TODO update the header row with the names of the configs
+        # TODO weapon rows, populate the appropriate config column with the score for that weapon type's scores
+        print('some day soon we will write out an updated version of the source file with scores from the configs')
+
+        input_file = open(self._source_file)
+        output_file = open(self._source_file + '.tmp', 'x')
+
+        header_row = input_file.readline()
+
+        output_file.writelines(self.update_header_with_config_names(header_row, configurations))
+
+        input_file.close()
+        output_file.close()
+
+        os.remove(input_file.name)
+        os.rename(output_file.name, input_file.name)
+
+    @staticmethod
+    def update_header_with_config_names(header_row, configurations):
+        # partitioned_header =   #  header_row.partition('Notes, ')
+        partitioned_header = header_row.split('Notes, ')
+
+        print('partitioned header is "{0}"'.format(partitioned_header))
+
+        #  TODO refactor this its own function
+        header_with_configs = partitioned_header[0] + 'Notes, '
+
+        for config in configurations:
+            header_with_configs = header_with_configs + '{0}, '.format(config.name)
+
+        header_with_configs += partitioned_header[1]
+        return header_with_configs
 
     @staticmethod
     def clean_up_perk_name(perk_name):
