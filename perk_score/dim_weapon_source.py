@@ -71,16 +71,16 @@ class DestinyItemManagerWeaponSource:
         return config
 
     def update_with_configs(self, configurations):
-        # TODO update the header row with the names of the configs
         # TODO weapon rows, populate the appropriate config column with the score for that weapon type's scores
-        print('some day soon we will write out an updated version of the source file with scores from the configs')
-
         input_file = open(self._source_file)
         output_file = open(self._source_file + '.tmp', 'x')
 
         header_row = input_file.readline()
 
         output_file.writelines(self.update_header_with_config_names(header_row, configurations))
+
+        for weapon in input_file:
+            output_file.write(self.add_score_to_weapon_line(weapon, configurations))
 
         input_file.close()
         output_file.close()
@@ -90,19 +90,40 @@ class DestinyItemManagerWeaponSource:
 
     @staticmethod
     def update_header_with_config_names(header_row, configurations):
-        # partitioned_header =   #  header_row.partition('Notes, ')
-        partitioned_header = header_row.split('Notes, ')
+        notes_header = 'Notes, '
 
-        print('partitioned header is "{0}"'.format(partitioned_header))
-
-        #  TODO refactor this its own function
-        header_with_configs = partitioned_header[0] + 'Notes, '
+        partitioned_header = header_row.split(notes_header)
+        header_with_configs = partitioned_header[0] + notes_header
 
         for config in configurations:
             header_with_configs = header_with_configs + '{0}, '.format(config.name)
 
         header_with_configs += partitioned_header[1]
         return header_with_configs
+
+    def add_score_to_weapon_line(self, weapon_line, configurations):
+        split_weapon = weapon_line.split(',')
+
+        first_half = split_weapon[0:self._perk_index]
+        perks = split_weapon[self._perk_index:len(split_weapon)]
+
+        first_half = first_half + [' {0}'.format(self.score_perks(first_half[self._type_index].strip(), perks, configuration)) for configuration in configurations]
+
+        return ','.join(first_half + perks)
+
+    @staticmethod
+    def score_perks(weapon_type, perks, configuration):
+        if weapon_type not in configuration.perks_by_weapon_type.keys():
+            return 0
+
+        total_score = 0
+        perk_scores = configuration.perks_by_weapon_type[weapon_type]
+
+        for perk in perks:
+            if perk in perk_scores.keys():
+                total_score += perk_scores[perk]
+
+        return total_score
 
     @staticmethod
     def clean_up_perk_name(perk_name):
