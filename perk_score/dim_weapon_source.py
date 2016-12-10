@@ -120,8 +120,9 @@ class DestinyItemManagerWeaponSource:
         perk_scores = configuration.perks_by_weapon_type[weapon_type]
 
         for perk in perks:
-            if perk in perk_scores.keys():
-                total_score += perk_scores[perk]
+            perk_name = DestinyItemManagerWeaponSource.clean_up_perk_name(perk)
+            if perk_name in perk_scores.keys():
+                total_score += perk_scores[perk_name]
 
         return total_score
 
