@@ -2,3 +2,8 @@
 *.iml
 *_perk_score_config.txt
 destinyWeapons.csv
+.vscode/
+
+__pycache__/
+*.py[cod]
+*$py.class

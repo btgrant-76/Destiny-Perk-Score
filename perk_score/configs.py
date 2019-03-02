@@ -12,7 +12,7 @@ def config_name(file_name):
     return file_name.replace(config_file_identifier, '')
 
 
-class Config:
+class Config(object):
     _all_weapon_types = sorted(['Auto Rifle', 'Scout Rifle', 'Hand Cannon', 'Pulse Rifle', 'Fusion Rifle', 'Shotgun',
                                'Sniper Rifle', 'Sidearm', 'Rocket Launcher', 'Machine Gun', 'Sword'])
     name = None

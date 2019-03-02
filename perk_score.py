@@ -3,11 +3,18 @@ from os import listdir
 import perk_score.configs as configs
 import perk_score.dim_weapon_source as weapons
 
+
+# TODO testing
+# test a workflow where there are existing perk configs & new perks are detected in the weapon source to verify
+# that we inform the user that new perks were detected.
+
+
 cur_dir_files = listdir('.')
 
 weapon_file = None
 potential_sources = weapons.source_file(cur_dir_files)
 if len(potential_sources) != 1:
+    # TODO update this message to include the source from which the file should originate. This information should come from the weapon source.
     print('A ' + weapons.file_name + ' must be available in the current directory. ' +
           'Please add one and run perk score again.')
     exit()
@@ -36,8 +43,8 @@ if len(config_file_names) == 0:
           'and run perk_score again.'.format(default_config.config_file_name()))
     exit()
 else:
-    config_names = [configs.config_name(file_name) for file_name in config_file_names]
-    configs_from_files = {name: configs.Config(name) for name in config_names}
+    config_file_names = [configs.config_name(file_name) for file_name in config_file_names]
+    configs_from_files = {file_name: configs.Config(file_name) for file_name in config_file_names}
     [configuration.read_file() for configuration in configs_from_files.values()]
     configs_with_new_perks = list(filter(lambda conf: conf.add_missing_perks(default_config),
                                          configs_from_files.values()))
@@ -51,4 +58,8 @@ else:
               'Please update the configs and run perk_score again.'.format(names_of_updated_configs))
     else:
         weapons_source.update_with_configs(configs_from_files.values())
+
+        configs = '{0}'.format(config_file_names).strip('[]')
+
+        print('Scores from configs have been added:  {0}'.format(configs))
     exit()
