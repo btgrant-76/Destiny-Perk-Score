@@ -38,6 +38,7 @@ Iron Banner, Trials, vanilla Crucible, DPS aims to please.
 
 Regardless of what your configuration is *for*, the files name need to follow the format of `Config Name_perk_score_config.txt`
 otherwise DPS won't be able to find the config. For example, if you wanted configurations for PVP, PVE and Iron Banner, you could have the following files:
+
 * `PVP_perk_score_config.txt`
 * `PVE_perk_score_config.txt`
 * `Iron Banner_perk_score_config.txt`
